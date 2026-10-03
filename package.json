@@ -1,0 +1,83 @@
+{
+  "name": "ministry-portal-desktop",
+  "productName": "Ministry Portal",
+  "version": "1.0.0",
+  "description": "The Imperial Ministries of Skyrim",
+  "main": "main.js",
+  "author": "The Ministry of Civil & Administrative Affairs",
+  "license": "UNLICENSED",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder --win nsis --publish never",
+    "release": "electron-builder --win nsis --publish always"
+  },
+  "devDependencies": {
+    "electron": "^33.0.0",
+    "electron-builder": "^25.0.0"
+  },
+  "build": {
+    "appId": "com.koministry.portal",
+    "productName": "Ministry Portal",
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "shell.js",
+      "shell.html",
+      "splash.html",
+      "offline.html",
+      "settings.html",
+      "build/icon.png"
+    ],
+    "protocols": [
+      {
+        "name": "Ministry Portal",
+        "schemes": [
+          "ministry"
+        ]
+      }
+    ],
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "WosyJr",
+        "repo": "ministry-portal-app"
+      }
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "build/icon.ico",
+      "artifactName": "MinistryPortalSetup.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Ministry Portal",
+      "installerIcon": "build/icon.ico",
+      "uninstallerIcon": "build/icon.ico",
+      "uninstallDisplayName": "Ministry Portal"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/WosyJr/ministry-portal-app.git"
+  },
+  "dependencies": {
+    "@xhayper/discord-rpc": "^1.5.1",
+    "electron-updater": "^6.8.9"
+  }
+}

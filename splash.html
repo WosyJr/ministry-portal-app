@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src data:; script-src 'unsafe-inline'">
+<title>Ministry</title>
+<style>
+  :root{--parch:#F1E6CC;--paper:#F6EDD6;--ink:#2B1B0E;--sepia:#5A4128;--blood:#6B1414;--line:#B89A62;--gold:#8C6A2F}
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{margin:0;background:var(--parch);color:var(--ink);
+    font-family:"EB Garamond",Garamond,"Times New Roman",Georgia,serif;font-size:17px;line-height:1.55;
+    display:flex;align-items:center;justify-content:center;text-align:center;padding:32px;
+    background-image:radial-gradient(ellipse at 50% 0%,rgba(255,250,235,.6),transparent 60%);
+    -webkit-user-select:none;user-select:none}
+  .seal{width:86px;height:86px;margin:0 auto 22px;display:block}
+  h1{font-family:"Fondamento","Palatino Linotype","Book Antiqua",Georgia,serif;font-weight:400;
+    font-size:30px;color:var(--blood);margin:0 0 12px}
+  p{max-width:430px;margin:0 auto 10px;color:var(--sepia)}
+  .small{font-size:14px;opacity:.85}
+  .btn{font-family:inherit;font-size:16px;padding:11px 24px;border:1px solid var(--blood);
+    background:var(--blood);color:var(--parch);border-radius:2px;cursor:pointer;min-height:44px}
+  .btn:hover{background:#8A1E1E}
+  .btn.ghost{background:transparent;color:var(--sepia);border-color:var(--line)}
+  .btn.ghost:hover{background:rgba(184,154,98,.14)}
+  .row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+  input[type=text]{font-family:inherit;font-size:16px;padding:11px 13px;width:100%;
+    border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:2px;text-align:center;
+    -webkit-user-select:text;user-select:text}
+  .rule{display:flex;align-items:center;gap:14px;max-width:360px;margin:26px auto 0}
+  .rule span{height:1px;background:var(--line);flex:1}
+</style>
+</head>
+<body>
+<main>
+<svg class="seal" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="Seal of the Ministry"><defs><path id="ring" d="M60,60 m-44,0 a44,44 0 1,1 88,0 a44,44 0 1,1 -88,0"/></defs><circle cx="60" cy="60" r="57" fill="#6B1414"/><circle cx="60" cy="60" r="53" fill="none" stroke="#D9BE84" stroke-width="1.5"/><circle cx="60" cy="60" r="34" fill="none" stroke="#D9BE84" stroke-width="1"/><text font-family="EB Garamond, Georgia, serif" font-size="8.3" letter-spacing="1.1" fill="#F1E6CC" font-weight="600"><textPath href="#ring" startOffset="1%">MINISTRY OF CIVIL &amp; ADMINISTRATIVE AFFAIRS &#10022;</textPath></text><g fill="#D9BE84"><polygon points="60,33 64,54 85,60 64,66 60,87 56,66 35,60 56,54"/><polygon points="60,44 62.5,57.5 76,60 62.5,62.5 60,76 57.5,62.5 44,60 57.5,57.5" fill="#6B1414"/><circle cx="60" cy="60" r="3.2"/></g></svg>
+  <h1>The Imperial Ministries</h1>
+  <p class="small">Opening the hall&hellip;</p>
+</main>
+
+</body>
+</html>
