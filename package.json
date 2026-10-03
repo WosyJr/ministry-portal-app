@@ -45,7 +45,8 @@
       {
         "provider": "github",
         "owner": "WosyJr",
-        "repo": "ministry-portal-app"
+        "repo": "ministry-portal-app",
+        "releaseType": "release"
       }
     ],
     "win": {
