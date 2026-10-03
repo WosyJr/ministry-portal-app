@@ -3,6 +3,7 @@
   if (!M) return;
 
   var HALLS = [
+    { key: 'ministries', name: 'All Ministries', path: '/', d: 'M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z' },
     { key: 'hall', name: 'The Hall', path: '/hall', d: 'M3 11l9-7 9 7M5 10v10h14V10' },
     { key: 'desk', name: 'My Desk', path: '/staff/desk', d: 'M3 7h18v12H3zM3 11h18' },
     { key: 'docket', name: 'The Docket', path: '/records', d: 'M6 3h9l4 4v14H6zM15 3v5h4M9 12h7M9 16h7' },
@@ -19,7 +20,6 @@
   HALLS.forEach(function (h) {
     var b = document.createElement('button');
     b.className = 'railbtn';
-    b.title = h.name;
     b.setAttribute('aria-label', h.name);
 
     var mark = document.createElement('span');
@@ -50,17 +50,141 @@
 
   function id(x) { return document.getElementById(x); }
 
+  var tip = id('tip');
+  var tipTimer = null;
+
+  function showTip(el, text) {
+    if (!text) return;
+    var r = el.getBoundingClientRect();
+    tip.textContent = text;
+    tip.style.top = Math.round(r.top + r.height / 2) + 'px';
+    tip.classList.add('show');
+  }
+
+  function hideTip() {
+    clearTimeout(tipTimer);
+    tip.classList.remove('show');
+  }
+
+  function tipFor(el, text) {
+    el.addEventListener('mouseenter', function () {
+      clearTimeout(tipTimer);
+      tipTimer = setTimeout(function () { showTip(el, text); }, 110);
+    });
+    el.addEventListener('mouseleave', hideTip);
+    el.addEventListener('click', hideTip);
+  }
+
+  HALLS.forEach(function (h) { tipFor(buttons[h.key].el, h.name); });
+  tipFor(id('settings'), 'Settings');
+
   id('min').addEventListener('click', function () { M.minimise(); });
   id('max').addEventListener('click', function () { M.maximise(); });
   id('close').addEventListener('click', function () { M.close(); });
   id('back').addEventListener('click', function () { M.back(); });
   id('settings').addEventListener('click', function () { M.settings(); });
-  id('letters').addEventListener('click', function () { M.go('/staff/letters'); });
+  var deskOpen = false;
+
+  function setDesk(on) {
+    deskOpen = !!on;
+    id('desk').classList.toggle('show', deskOpen);
+    id('letters').setAttribute('aria-expanded', deskOpen ? 'true' : 'false');
+    if (deskOpen) M.deskRefresh();
+  }
+
+  function drawDesk(d) {
+    var body = id('deskbody');
+    body.textContent = '';
+    var groups = (d && d.groups) || [];
+
+    if (!groups.length) {
+      var e = document.createElement('p');
+      e.className = 'dempty';
+      e.textContent = d && d.none
+        ? 'The desk does not open from here. Sign in at the Hall to see what wants your hand.'
+        : 'Nothing wants your hand. The desk is clear.';
+      body.appendChild(e);
+      id('deskclear').style.display = 'none';
+      return;
+    }
+
+    id('deskclear').style.display = '';
+
+    groups.forEach(function (g) {
+      var box = document.createElement('div');
+      box.className = 'dgroup';
+
+      if (g.head) {
+        var h = document.createElement('div');
+        h.className = 'dgh';
+        h.textContent = g.head;
+        box.appendChild(h);
+      }
+
+      g.items.forEach(function (i) {
+        var row = document.createElement('div');
+        row.className = 'drow';
+
+        var a = document.createElement('button');
+        a.type = 'button';
+        a.className = 'ditem' + (i.urgent ? ' urgent' : '');
+
+        var t = document.createElement('span');
+        t.className = 'dt';
+        t.textContent = i.title;
+        a.appendChild(t);
+
+        if (i.note) {
+          var n = document.createElement('span');
+          n.className = 'dn';
+          n.textContent = i.note;
+          a.appendChild(n);
+        }
+
+        a.addEventListener('click', function () {
+          setDesk(false);
+          if (i.link) M.go(i.link);
+        });
+        row.appendChild(a);
+
+        if (i.id) {
+          var tick = document.createElement('button');
+          tick.type = 'button';
+          tick.className = 'dtick';
+          tick.title = 'I have seen this';
+          tick.setAttribute('aria-label', 'I have seen this');
+          tick.textContent = '✓';
+          tick.addEventListener('click', function () {
+            row.remove();
+            M.deskSeen(i.id);
+          });
+          row.appendChild(tick);
+        }
+
+        box.appendChild(row);
+      });
+
+      body.appendChild(box);
+    });
+  }
+
+  id('letters').addEventListener('click', function (ev) {
+    ev.stopPropagation();
+    setDesk(!deskOpen);
+  });
+  id('desk').addEventListener('click', function (ev) { ev.stopPropagation(); });
+  id('deskall').addEventListener('click', function () { setDesk(false); M.go('/staff/desk'); });
+  id('deskclear').addEventListener('click', function () { setDesk(false); M.deskClear(); });
+  document.addEventListener('click', function () { if (deskOpen) setDesk(false); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && deskOpen) setDesk(false); });
+
+  M.onDesk(drawDesk);
   id('restart').addEventListener('click', function () { M.restart(); });
   id('later').addEventListener('click', function () { id('bump').classList.remove('show'); });
 
   M.onWhere(function (w) {
     if (!w) return;
+    if (deskOpen) setDesk(false);
     id('hall').textContent = w.line1 || '';
     id('sub').textContent = w.line2 || '';
     Object.keys(buttons).forEach(function (k) {

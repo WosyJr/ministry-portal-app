@@ -1,7 +1,7 @@
 {
   "name": "ministry-portal-desktop",
   "productName": "Ministry Portal",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "The Imperial Ministries of Skyrim",
   "main": "main.js",
   "author": "The Ministry of Civil & Administrative Affairs",
